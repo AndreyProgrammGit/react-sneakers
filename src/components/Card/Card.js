@@ -1,26 +1,42 @@
-export const Card = ( { props } ) => {
+import styles from './Card.module.scss';
+import { useState } from 'react';
+
+export const Card = ( { cards, onPlus } ) => {
+
+  const [isAdded, setIsAdded] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const title = cards.title;
+  const price = cards.price;
+  const img = cards.img;
+
+  const addToCart = () => {
+    onPlus({title, price, img});
+    setIsAdded(!isAdded);
+  }
+
+  const addToFavorite = () => {
+    setIsFavorite(!isFavorite);
+  }
+  
   return (
-    props.map((obj) => (
-      <div className="card" key={obj.id}>
-        <div className="favorite">
-          <img src="/img/unliked.svg" alt="#" />
+      <div className={styles.card} key={cards.id}>
+        <div className={styles.favorite}>
+          <img onClick={addToFavorite} src={ isFavorite ? "/img/liked.svg" : "/img/unliked.svg"} alt="#" />
         </div>
-        <img style={{ width: 133, height: 112 }} src={obj.img} alt="sneakers" />
-        <h5>{obj.title}</h5>
+        <img style={{ width: 133, height: 112 }} src={cards.img} alt="sneakers" />
+        <h5>{cards.title}</h5>
         <div className="d-flex justify-between align-center ">
           <div className="d-flex flex-column ">
             <span>
               цена:
             </span>
             <b>
-              {obj.price} грн. 
+              {cards.price} грн. 
             </b>
           </div>
-          <button className="button">
-            <img style={{ width: 11, height: 11 }} src="/img/plus.svg" alt="#" />
-          </button>
+          <img className={styles.plus} onClick={addToCart} src={ isAdded ? "/img/btn-checked.svg" : "/img/btn-plus.svg"} alt="#" />
         </div>
       </div> 
-    ))
-  )
+    )
 }
